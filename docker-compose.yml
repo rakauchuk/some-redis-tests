@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  redis:
+    image: docker.io/bitnami/redis:7.0
+    container_name: app-redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+#      - REDIS_PASSWORD=redis
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379'
+    restart: always
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+    networks:
+      - app-tier
+
+  php:
+    tty: true # Enables debugging capabilities when attached to this container.
+    image: docker.io/bitnami/php-fpm:8.1
+    links:
+      - redis
+    volumes:
+      - .:/app
+    networks:
+      - app-tier
+
+networks:
+  app-tier:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local

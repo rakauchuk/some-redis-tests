@@ -12,6 +12,6 @@ $loop->subscribe("channel");
 foreach ($loop as $message) {
     if ($message->kind == "message") {
         echo("Received: {$message->payload}\n");
-        $loop->unsubscribe("channel");
+//        $loop->unsubscribe("channel");
     }
 }
